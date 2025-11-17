@@ -12,7 +12,7 @@ Các danh mục của ứng dụng bao gồm:
 
 ---
 ## 2. Thông tin tập đoàn
-> Tên tập đoàn: 3 anh em.
+> Tên tập đoàn: HELPPO.
 
 ### Các thành viên:
   - Lê Minh Quang

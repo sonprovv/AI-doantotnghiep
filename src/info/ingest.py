@@ -4,13 +4,17 @@ import re
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_ollama import OllamaEmbeddings
-from langchain.schema import Document
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_core.documents import Document
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # --------- Config ---------
 DATA_DIR = Path("src/info/data")
 PERSIST_DIR = "chroma_db"
-EMBED_MODEL = "mxbai-embed-large:latest"  # or nomic-embed-text:latest
+EMBED_MODEL = "models/text-embedding-004"
 
 # --------- Load docs (keep raw markdown) ---------
 if not DATA_DIR.exists() or not DATA_DIR.is_dir():
@@ -72,7 +76,6 @@ def preprocess_keep_newlines(text: str) -> str:
     return text.strip()
 
 # --------- Regex split by heading lines (robust) ---------
-# heading_re = re.compile(r'^(#{1,6})\s*(.+)', re.MULTILINE)
 heading_re = re.compile(r'^(##)\s*(.+)', re.MULTILINE)
 
 def split_by_headings_regex(text: str, source: str):
@@ -145,7 +148,7 @@ for i, c in enumerate(chunks):
 if not chunks:
     print("⚠️ No chunks to embed — aborting.")
 else:
-    embeddings = OllamaEmbeddings(model=EMBED_MODEL)
+    embeddings = GoogleGenerativeAIEmbeddings(model=EMBED_MODEL, google_api_key=os.getenv("GOOGLE_API_KEY"))
     vs = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,

@@ -1,11 +1,11 @@
-from src.utils.OllamaService import OllamaService
+from src.utils.GeminiService import GeminiService
 from src.utils.PineconeService import PineconeService
 import json
 
 class CreateController:
 
     def __init__(self):
-        self.ollamaService = OllamaService()
+        self.geminiService = GeminiService()
         self.pineconeService = PineconeService()
 
     # --------------------------------------------------------------
@@ -103,7 +103,7 @@ class CreateController:
         print(text)
         print('=========================================================')
 
-        embed = self.ollamaService.ollama_get_embedding(text.lower())
+        embed = self.geminiService.gemini_get_embedding(text.lower())
 
         if not embed: return False
 

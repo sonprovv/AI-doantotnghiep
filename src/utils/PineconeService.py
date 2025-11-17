@@ -114,7 +114,9 @@ class PineconeService:
 
             data = []
             for match in result['matches']:
-                data.append(match['metadata'])
+                item = match["metadata"]
+                item["similarity_score"] = match.get("score", None)
+                data.append(item)
 
             if len(data)==0:
                 return {
