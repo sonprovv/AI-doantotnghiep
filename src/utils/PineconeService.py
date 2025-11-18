@@ -13,6 +13,20 @@ class PineconeService:
         self.PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
         self.PINECONE_HOST = os.getenv("PINECONE_HOST")
 
+        # Debug: In ra giá trị để kiểm tra
+        print(f"[DEBUG] PINECONE_API_KEY: {self.PINECONE_API_KEY[:10]}..." if self.PINECONE_API_KEY else "[DEBUG] PINECONE_API_KEY: None")
+        print(f"[DEBUG] PINECONE_HOST (raw): '{self.PINECONE_HOST}'")
+
+        # Loại bỏ https:// nếu có trong host và strip khoảng trắng
+        if self.PINECONE_HOST:
+            self.PINECONE_HOST = self.PINECONE_HOST.strip()
+            if self.PINECONE_HOST.startswith("https://"):
+                self.PINECONE_HOST = self.PINECONE_HOST.replace("https://", "")
+            if self.PINECONE_HOST.startswith("http://"):
+                self.PINECONE_HOST = self.PINECONE_HOST.replace("http://", "")
+        
+        print(f"[DEBUG] PINECONE_HOST (cleaned): '{self.PINECONE_HOST}'")
+        
         self.pc = Pinecone(api_key=self.PINECONE_API_KEY)
         self.index = self.pc.Index(name="demo-pinecone", host=self.PINECONE_HOST)
 
